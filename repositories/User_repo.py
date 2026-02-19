@@ -20,3 +20,7 @@ class UserRepo:
         self.db.add(user)
         self.db.commit()
         return user 
+    def update_user_name(self,user_name:str):
+        self.db.add(user_name)
+        self.db.commit()
+        return user_name

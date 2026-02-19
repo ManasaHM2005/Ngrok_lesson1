@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from db import get_db
 from models import User
 from repositories.User_repo import UserRepo
-from schemas.User_schema import UserSchema,UserUpdateApiKey
+from schemas.User_schema import UserSchema,UserUpdateApiKey,UserUpdateUsername
 
 router = APIRouter()
 
@@ -41,3 +41,13 @@ def update_user(user_id: int, user_update: UserUpdateApiKey, db: Session = Depen
     user.api_key = user_update.api_key
     user_repo.update_user(user)
     return user
+
+@router.put("/users/{user_id}/user_name")
+def update_user(user_id: int, user_update: UserUpdateUsername, db: Session = Depends(get_db)):
+    user_repo = UserRepo(db)
+    user = user_repo.get_user_by_id(user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    user.user_name = user_update.user_name
+    user_repo.update_user(user)
+    return user 
